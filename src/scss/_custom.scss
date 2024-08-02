@@ -1,0 +1,18 @@
+// Here you can add other styles
+.w-15p{
+  width: 15%;
+}
+.w-86p{
+  max-width: 86%;
+  border: 1px solid #FFF;
+}
+.full-width {
+  min-width: 100%;
+}
+/* Oculta a barra de rolagem em todos os navegadores */
+.hide-scrollbar {
+  overflow-y: auto; /* Permite o scroll, mas oculta a barra */
+}
+.hide-w-scroll{
+  overflow-x: hidden;
+}
