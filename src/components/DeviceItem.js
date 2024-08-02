@@ -303,14 +303,18 @@ const DeviceItem = ({ device }) => {
   }
 
   return (
-    <div className="overflow-hidden m-2 mb-4">
-      <CRow className="p-2">
+    <div className="overflow-hidden m-lg-2 mb-4">
+      {/* device header */}
+      <div className="p-2 d-flex gap-4 justify-content-between ">
+        {/* device name and id */}
         <CCol sm={5}>
           <h4 id="traffic" className="card-title mb-0">
             {deviceName}
           </h4>
           <span className="small text-body-secondary">ID: {devicePhysicalId}</span>
         </CCol>
+
+        {/* CSV BUTTON */}
         <CCol sm={4} className="d-none d-md-block">
           <CSVLink
             data={generateCSV()}
@@ -321,33 +325,42 @@ const DeviceItem = ({ device }) => {
             <CIcon icon={cilCloudDownload} /> Download CSV
           </CSVLink>
         </CCol>
-        <CCol sm={2}>
-          <CFormSelect value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
-            <option value=""></option>
-            <option value="30min">30m</option>
-            <option value="1h">1h</option>
-            <option value="6h">6h</option>
-            <option value="24h">24h</option>
-            <option value="7d">7d</option>
-            <option value="30d">30d</option>
-            <option value="6m">6m</option>
-            <option value="1y">1a</option>
-          </CFormSelect>
-        </CCol>
-        <CCol sm={1}>
-          <CFormSelect
-            size="SM"
-            className="mb-1"
-            value={updateTime} // Valor selecionado do select
-            onChange={(e) => setUpdateTime(parseInt(e.target.value))}
-          >
-            <option value=""></option>
-            <option value="5">5s</option>
-            <option value="10">10s</option>
-            <option value="15">15s</option>
-          </CFormSelect>
-        </CCol>
-      </CRow>
+        <div className="d-flex gap-2 w-50 ">
+          {/* select 1 */}
+          <CCol>
+            <CFormSelect
+              value={timeRange}
+              onChange={(e) => setTimeRange(e.target.value)}
+              className="border-primary "
+            >
+              <option value=""></option>
+              <option value="30min">30m</option>
+              <option value="1h">1h</option>
+              <option value="6h">6h</option>
+              <option value="24h">24h</option>
+              <option value="7d">7d</option>
+              <option value="30d">30d</option>
+              <option value="6m">6m</option>
+              <option value="1y">1a</option>
+            </CFormSelect>
+          </CCol>
+          {/* select 2 */}
+          <CCol>
+            <CFormSelect
+              size="SM"
+              className="mb-1 border-primary"
+              value={updateTime} // Valor selecionado do select
+              onChange={(e) => setUpdateTime(parseInt(e.target.value))}
+            >
+              <option value=""></option>
+              <option value="5">5s</option>
+              <option value="10">10s</option>
+              <option value="15">15s</option>
+            </CFormSelect>
+          </CCol>
+        </div>
+      </div>
+      {/*  sessão de cards */}
       <CRow>
         {Object.keys(transformedData)
           .filter((key) => key !== 'id' && key !== 'temperature' && transformedData[key].length > 0)
@@ -372,79 +385,27 @@ const DeviceItem = ({ device }) => {
 
             return (
               <CCol xs="12" sm="6" md="4" lg="3" key={key}>
-                <CCard>
+                <CCard className=" border border-primary">
                   <CCardBody>
                     <CCardTitle>{sensorName}</CCardTitle>
                     <CCardText>
                       {formattedLastData} {sensorGrandeza}
                     </CCardText>
-                    <CCardText>Descrição: {sensorDescription}</CCardText>
+                    <CCardText>
+                      Descrição: <span className="text-body-secondary">{sensorDescription}</span>
+                    </CCardText>
                     <CCardText>
                       Última Transmissão:{' '}
-                      {lastTransmission ? formatDate(parseDate(lastTransmission)) : 'N/A'}
+                      <span className="text-body-secondary">
+                        {lastTransmission ? formatDate(parseDate(lastTransmission)) : 'N/A'}
+                      </span>
                     </CCardText>
                   </CCardBody>
                 </CCard>
               </CCol>
             )
           })}
-      </CRow>
-
-      {transformedData.energy_consumption && transformedData.energy_consumption.length > 0 && (
-        <CRow className="mt-4">
-          <CCol xs="12">
-            <CCard>
-              <CCardBody>
-                <CCardTitle>Energia Total Consumida nos {timeRangeLabel}</CCardTitle>
-                <CCardText>{totalEnergy.toFixed(2)} kWh</CCardText>
-                <CCardText>
-                  Custo aproximado: R${(totalEnergy.toFixed(2) * 0.59296).toFixed(2)}
-                </CCardText>
-              </CCardBody>
-            </CCard>
-          </CCol>
-        </CRow>
-      )}
-      <CRow className="mt-4">
-        {Object.keys(transformedData)
-          .filter(
-            (key) =>
-              key !== 'id' &&
-              key !== 'temperature' &&
-              key !== 'horimeter' &&
-              transformedData[key].length > 0,
-          )
-          .map((key) => {
-            const sensorInfo = sensors[key] || {}
-            const sensorName = sensorInfo.name || key.charAt(0).toUpperCase() + key.slice(1)
-            const sensorGrandeza = sensorInfo.grandeza || ''
-
-            return (
-              <CCol xs="6" key={key}>
-                <CCard className="mb-4">
-                  <CCardHeader>
-                    {sensorName} ({sensorGrandeza})
-                  </CCardHeader>
-                  <CCardBody>
-                    <VariableChart
-                      deviceData={transformedData[key]
-                        .slice()
-                        .reverse()
-                        .map((entry) => ({
-                          created_at: formatDate(parseDate(entry.created_at)),
-                          value: entry.value,
-                        }))}
-                      variableLabel={`${sensorName} (${sensorGrandeza})`}
-                      sensorMin={parseFloat(sensorInfo?.min)}
-                      sensorMax={parseFloat(sensorInfo?.max)}
-                    />
-                  </CCardBody>
-                </CCard>
-              </CCol>
-            )
-          })}
-      </CRow>
-      <CRow className="mt-4">
+        {/* sensor de temperatura /card */}
         {transformedData.temperature &&
           Object.keys(transformedData.temperature).map((sensorId) => {
             // Encontrar o último dado transmitido para o sensor de temperatura
@@ -469,20 +430,25 @@ const DeviceItem = ({ device }) => {
 
             return (
               <CCol xs="12" sm="6" md="4" lg="3" key={`temperature_${sensorId}`}>
-                <CCard>
+                <CCard className=" border border-primary">
                   <CCardBody>
                     <CCardTitle>{sensorName}</CCardTitle>
                     <CCardText>
                       {formattedLastTemperatureData} {sensorGrandeza}
                     </CCardText>
                     <CCardText>
-                      Descrição: {sensorInfo ? sensorInfo.description : 'Sensor de Temperatura'}
+                      Descrição:{' '}
+                      <span className="text-body-secondary">
+                        {sensorInfo ? sensorInfo.description : 'Sensor de Temperatura'}
+                      </span>
                     </CCardText>
                     <CCardText>
                       Última Transmissão:{' '}
-                      {lastTemperatureTransmission
-                        ? formatDate(parseDate(lastTemperatureTransmission))
-                        : 'N/A'}
+                      <span className="text-body-secondary">
+                        {lastTemperatureTransmission
+                          ? formatDate(parseDate(lastTemperatureTransmission))
+                          : 'N/A'}
+                      </span>
                     </CCardText>
                   </CCardBody>
                 </CCard>
@@ -490,8 +456,66 @@ const DeviceItem = ({ device }) => {
             )
           })}
       </CRow>
+      {/* consumo de energia, por hora visivel apenas em smartmeter / card w-full */}
+      {transformedData.energy_consumption && transformedData.energy_consumption.length > 0 && (
+        <CRow className="mt-4 ">
+          <CCol xs="12">
+            <CCard className="mb-4 border border-primary">
+              <CCardBody>
+                <CCardTitle>Energia Total Consumida nos {timeRangeLabel}</CCardTitle>
+                <CCardText>{totalEnergy.toFixed(2)} kWh</CCardText>
+                <CCardText>
+                  Custo aproximado:{' '}
+                  <span className="text-body-secondary">
+                    R${(totalEnergy.toFixed(2) * 0.59296).toFixed(2)}
+                  </span>
+                </CCardText>
+              </CCardBody>
+            </CCard>
+          </CCol>
+        </CRow>
+      )}
+      {/*info graficos /grafico */}
+      <CRow className="mt-4 bnor">
+        {Object.keys(transformedData)
+          .filter(
+            (key) =>
+              key !== 'id' &&
+              key !== 'temperature' &&
+              key !== 'horimeter' &&
+              transformedData[key].length > 0,
+          )
+          .map((key) => {
+            const sensorInfo = sensors[key] || {}
+            const sensorName = sensorInfo.name || key.charAt(0).toUpperCase() + key.slice(1)
+            const sensorGrandeza = sensorInfo.grandeza || ''
 
-      <CRow className="mt-4">
+            return (
+              <CCol xs="6" key={key}>
+                <CCard className="mb-4 border border-primary">
+                  <CCardHeader>
+                    {sensorName} ({sensorGrandeza})
+                  </CCardHeader>
+                  <CCardBody>
+                    <VariableChart
+                      deviceData={transformedData[key]
+                        .slice()
+                        .reverse()
+                        .map((entry) => ({
+                          created_at: formatDate(parseDate(entry.created_at)),
+                          value: entry.value,
+                        }))}
+                      variableLabel={`${sensorName} (${sensorGrandeza})`}
+                      sensorMin={parseFloat(sensorInfo?.min)}
+                      sensorMax={parseFloat(sensorInfo?.max)}
+                    />
+                  </CCardBody>
+                </CCard>
+              </CCol>
+            )
+          })}
+
+        {/*  sensor de temperatura, apenas smartemp /grafico */}
         {transformedData.temperature &&
           Object.keys(transformedData.temperature).map((sensorId) => {
             // Obter o nome e a grandeza do sensor a partir do objeto sensors
@@ -505,7 +529,7 @@ const DeviceItem = ({ device }) => {
 
             return (
               <CCol xs={6} key={sensorId}>
-                <CCard className="mb-4 ">
+                <CCard className="mb-4 border border-primary">
                   <CCardHeader>
                     {sensorName} ({sensorGrandeza})
                   </CCardHeader>

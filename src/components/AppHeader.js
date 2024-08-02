@@ -12,8 +12,9 @@ import {
   useColorModes,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilContrast, cilMenu, cilMoon, cilSun } from '@coreui/icons'
-
+import { cilContrast, cilDevices, cilMenu, cilMoon, cilSun } from '@coreui/icons'
+import { Link } from 'react-router-dom'
+import 'simplebar-react/dist/simplebar.min.css'
 const AppHeader = () => {
   const headerRef = useRef()
   const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
@@ -29,14 +30,24 @@ const AppHeader = () => {
   }, [])
 
   return (
-    <CHeader position="sticky" className="" ref={headerRef}>
-      <CContainer className=" px-4" fluid>
+    <CHeader position="sticky" ref={headerRef}>
+      <CContainer className="px-2 px-lg-2 px-md-2" fluid>
         <CHeaderToggler
+          className="d-none d-lg-block"
           onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}
           style={{ marginInlineStart: '-14px' }}
         >
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
+
+        <CHeaderNav className="d-flex gap-3 d-lg-none">
+          <Link to="/devices/smartemp" className="text-decoration-none text-body-secondary fs-5">
+            Smartemp
+          </Link>
+          <Link to="/devices/smartmeter" className="text-decoration-none text-body-secondary fs-5">
+            Smartmeter
+          </Link>
+        </CHeaderNav>
         <CHeaderNav>
           <CDropdown variant="nav-item" placement="bottom-end">
             <CDropdownToggle caret={false}>

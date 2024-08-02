@@ -5,7 +5,6 @@ import { getStyle } from '@coreui/utils'
 
 const VariableChart = ({ deviceData, variableLabel }) => {
   const chartRef = useRef(null)
-
   useEffect(() => {
     document.documentElement.addEventListener('ColorSchemeChange', () => {
       if (chartRef.current) {
@@ -18,6 +17,7 @@ const VariableChart = ({ deviceData, variableLabel }) => {
 
   const variableData = deviceData.map((data) => data.value)
   const labels = deviceData.map((data) => data.created_at)
+  console.log
 
   const filledData = fillMissingData(labels, variableData)
 
@@ -40,14 +40,14 @@ const VariableChart = ({ deviceData, variableLabel }) => {
     datasets: [
       {
         label: variableLabel,
-        backgroundColor: `rgba(${getStyle('--cui-info-rgb')}, .1)`,
-        borderColor: getStyle('--cui-info'),
+        backgroundColor: `rgba(${getStyle('--cui-primary-rgb')}, .1)`,
+        borderColor: getStyle('--cui-primary'),
         //pointHoverBackgroundColor: getStyle('--cui-info'),
         borderWidth: 2,
         data: filledData,
         fill: true,
-        pointBackgroundColor: '#007bff', // Cor de preenchimento das bolinhas
-        pointBorderColor: '#007bff', // Cor da borda das bolinhas
+        pointBackgroundColor: getStyle('--cui-primary'), // Cor de preenchimento das bolinhas
+        pointBorderColor: getStyle('--cui-primary'), // Cor da borda das bolinhas
         pointRadius: 2, // Raio das bolinhas
         pointHoverRadius: 2, // Raio das bolinhas no hover
       },

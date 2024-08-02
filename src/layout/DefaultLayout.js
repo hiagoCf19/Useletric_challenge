@@ -4,7 +4,7 @@ import { AppContent, AppSidebar, AppHeader } from '../components/index'
 const DefaultLayout = () => {
   return (
     <div className="d-flex vh-100 ">
-      <div>
+      <div className="d-none d-lg-block ">
         <AppSidebar />
       </div>
 
