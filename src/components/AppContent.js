@@ -16,7 +16,7 @@ const AppContent = () => {
               element={<DeviceItem device={route.device} />}
             />
           ))}
-          <Route path="/" element={<Navigate to="/devices/smartmeter" replace />} />
+          <Route path="/" element={<Navigate to="/devices/smartemp" replace />} />
         </Routes>
       </Suspense>
     </div>

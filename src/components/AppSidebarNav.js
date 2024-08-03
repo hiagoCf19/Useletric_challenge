@@ -35,7 +35,7 @@ export const AppSidebarNav = ({ items }) => {
       <Component as="div" key={index}>
         {rest.to || rest.href ? (
           <CNavLink {...(rest.to && { as: NavLink })} {...rest}>
-            {navLink(name, icon, badge, indent)}a
+            {navLink(name, icon, badge, indent)}
           </CNavLink>
         ) : (
           navLink(name, icon, badge, indent)

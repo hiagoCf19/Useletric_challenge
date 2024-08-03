@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import { CChart } from '@coreui/react-chartjs'
 import { getStyle } from '@coreui/utils'
 
-const VariableChart = ({ deviceData, variableLabel }) => {
+const VariableChart = ({ deviceData, variableLabel, type }) => {
   const chartRef = useRef(null)
   useEffect(() => {
     document.documentElement.addEventListener('ColorSchemeChange', () => {
@@ -17,7 +17,6 @@ const VariableChart = ({ deviceData, variableLabel }) => {
 
   const variableData = deviceData.map((data) => data.value)
   const labels = deviceData.map((data) => data.created_at)
-  console.log
 
   const filledData = fillMissingData(labels, variableData)
 
@@ -91,7 +90,7 @@ const VariableChart = ({ deviceData, variableLabel }) => {
 
   return (
     <CChart
-      type="line"
+      type={type}
       ref={chartRef}
       style={{ height: '300px', marginTop: '40px' }}
       data={chartData}

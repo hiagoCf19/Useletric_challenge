@@ -64,7 +64,6 @@ const DeviceItem = ({ device }) => {
       try {
         const response = device
         if (response && response.resultado && response.device) {
-          console.log(response)
           setDeviceData(response.device.data)
           setDeviceName(response.device.name)
           setDeviceSensor(response.device.sensor)
@@ -361,7 +360,7 @@ const DeviceItem = ({ device }) => {
         </div>
       </div>
       {/*  sessão de cards */}
-      <CRow>
+      <CRow className="flex gap-3 gap-md-0">
         {Object.keys(transformedData)
           .filter((key) => key !== 'id' && key !== 'temperature' && transformedData[key].length > 0)
           .map((key) => {
@@ -384,7 +383,7 @@ const DeviceItem = ({ device }) => {
             const { totalEnergy, avgCurrent } = calculateEnergyAndCurrent(transformedData)
 
             return (
-              <CCol xs="12" sm="6" md="4" lg="3" key={key}>
+              <CCol sm="12" md="4" lg="3" key={key}>
                 <CCard className=" border border-primary">
                   <CCardBody>
                     <CCardTitle>{sensorName}</CCardTitle>
@@ -429,7 +428,7 @@ const DeviceItem = ({ device }) => {
             )
 
             return (
-              <CCol xs="12" sm="6" md="4" lg="3" key={`temperature_${sensorId}`}>
+              <CCol xs="12" sm="12" md="4" lg="3" key={`temperature_${sensorId}`}>
                 <CCard className=" border border-primary">
                   <CCardBody>
                     <CCardTitle>{sensorName}</CCardTitle>
@@ -456,11 +455,11 @@ const DeviceItem = ({ device }) => {
             )
           })}
       </CRow>
-      {/* consumo de energia, por hora visivel apenas em smartmeter / card w-full */}
+      {/* card w-full */}
       {transformedData.energy_consumption && transformedData.energy_consumption.length > 0 && (
-        <CRow className="mt-4 ">
+        <CRow className="mt-4">
           <CCol xs="12">
-            <CCard className="mb-4 border border-primary">
+            <CCard className=" border border-primary">
               <CCardBody>
                 <CCardTitle>Energia Total Consumida nos {timeRangeLabel}</CCardTitle>
                 <CCardText>{totalEnergy.toFixed(2)} kWh</CCardText>
@@ -475,23 +474,18 @@ const DeviceItem = ({ device }) => {
           </CCol>
         </CRow>
       )}
-      {/*info graficos /grafico */}
-      <CRow className="mt-4 bnor">
+      <h4 className="my-4">Representações gráficas</h4>
+
+      <CRow>
         {Object.keys(transformedData)
-          .filter(
-            (key) =>
-              key !== 'id' &&
-              key !== 'temperature' &&
-              key !== 'horimeter' &&
-              transformedData[key].length > 0,
-          )
+          .filter((key) => key !== 'id' && key !== 'temperature' && transformedData[key].length > 0)
           .map((key) => {
             const sensorInfo = sensors[key] || {}
             const sensorName = sensorInfo.name || key.charAt(0).toUpperCase() + key.slice(1)
             const sensorGrandeza = sensorInfo.grandeza || ''
 
             return (
-              <CCol xs="6" key={key}>
+              <CCol md="16" lg="6" key={key}>
                 <CCard className="mb-4 border border-primary">
                   <CCardHeader>
                     {sensorName} ({sensorGrandeza})
@@ -508,6 +502,7 @@ const DeviceItem = ({ device }) => {
                       variableLabel={`${sensorName} (${sensorGrandeza})`}
                       sensorMin={parseFloat(sensorInfo?.min)}
                       sensorMax={parseFloat(sensorInfo?.max)}
+                      type="bar"
                     />
                   </CCardBody>
                 </CCard>
@@ -528,7 +523,7 @@ const DeviceItem = ({ device }) => {
             )
 
             return (
-              <CCol xs={6} key={sensorId}>
+              <CCol md="16" lg="6" key={sensorId}>
                 <CCard className="mb-4 border border-primary">
                   <CCardHeader>
                     {sensorName} ({sensorGrandeza})
@@ -545,6 +540,7 @@ const DeviceItem = ({ device }) => {
                       variableLabel={`${sensorName} (${sensorGrandeza})`}
                       sensorMin={parseFloat(sensorInfo?.min)}
                       sensorMax={parseFloat(sensorInfo?.max)}
+                      type="line"
                     />
                   </CCardBody>
                 </CCard>
