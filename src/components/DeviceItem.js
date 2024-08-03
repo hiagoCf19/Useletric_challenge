@@ -359,7 +359,7 @@ const DeviceItem = ({ device }) => {
           </CCol>
         </div>
       </div>
-      {/*  sessão de cards */}
+      {/*  seção de cards */}
       <CRow className="flex gap-3 gap-md-0">
         {Object.keys(transformedData)
           .filter((key) => key !== 'id' && key !== 'temperature' && transformedData[key].length > 0)
@@ -510,7 +510,7 @@ const DeviceItem = ({ device }) => {
             )
           })}
 
-        {/*  sensor de temperatura, apenas smartemp /grafico */}
+        {/*  sensor de temperatura /grafico */}
         {transformedData.temperature &&
           Object.keys(transformedData.temperature).map((sensorId) => {
             // Obter o nome e a grandeza do sensor a partir do objeto sensors

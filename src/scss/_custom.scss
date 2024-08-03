@@ -1,31 +1,7 @@
-// Here you can add other styles
-.w-15p {
-  width: 15%;
-}
-.w-86p {
-  max-width: 86%;
-  border: 1px solid #fff;
-}
-.w-10p {
-  max-width: 10%;
-  border: 1px solid #fff;
-}
 .full-width {
   min-width: 100%;
 }
 
 .hide-scrollbar {
   overflow-y: auto;
-}
-.hide-w-scroll {
-  overflow-x: hidden;
-}
-
-.hidden {
-  display: none;
-}
-.min-w {
-  min-width: auto; /* Esse é o valor padrão, mas pode ser explícito se necessário */
-  min-height: auto; /* Esse é o valor padrão, mas pode ser explícito se necessário */
-  display: inline-block;
 }
